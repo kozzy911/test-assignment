@@ -4,6 +4,8 @@ import psycopg2
 from psycopg2 import Error
 import os
 import sys
+import json
+
 print ('Argument List:', str(sys.argv))
 # Argument List: ['reuters2.py', 'test', 'test2']
 args = sys.argv
@@ -46,41 +48,48 @@ class ConnectPG:
             self.cursor = self.connection.cursor()
 
             if (self.command == "update"):
-                # Executing a SQL query to update table
-                check_query = """SELECT id, title from news;"""
+                title = json.dumps(self.values[0])
+                print(title)
+                check_query = """SELECT id, title from news where title = '"""+title+"';"
                 self.cursor.execute(check_query)
                 self.connection.commit()
                 check_result = self.cursor.fetchall()
-                # print(check_result)
-                if check_result:
-                    for item in check_result:
-                        # print("Item: "+item[1])
-                        # print("Values: "+self.values[0])
-                        if (self.values[0] != item[1]):
-                            # print("Item: "+item[1])
-                            insert_query = """ INSERT INTO news (title, url, description, date) VALUES """+str(self.values)+""";"""
-                            self.cursor.execute(insert_query)
-                            self.connection.commit()
-                            # print("1 Record inserted successfully")
-                            count = self.cursor.rowcount
-                            # print(count, "Record inserted successfully ")
-                            # Fetch result
-                            # self.cursor.execute("SELECT * from news")
-                            # record = self.cursor.fetchall()
-                            # print("Result ", record)
-                        else:
-                            print("item already exists with id "+item[0])
-                else:
-                    insert_query = """ INSERT INTO news (title, url, description, date) VALUES """+str(self.values)+""";"""
-                    self.cursor.execute(insert_query)
-                    self.connection.commit()
-                    # print("1 Record inserted successfully")
-                    count = self.cursor.rowcount
-                    # print(count, "Record inserted successfully ")
-                    # Fetch result
-                    # self.cursor.execute("SELECT * from news")
-                    # record = self.cursor.fetchall()
-                    # print("Result ", record)
+                print(check_result)
+                # Executing a SQL query to update table
+                # check_query = """SELECT id, title from news;"""
+                # self.cursor.execute(check_query)
+                # self.connection.commit()
+                # check_result = self.cursor.fetchall()
+                # # print(check_result)
+                # if check_result:
+                #     for item in check_result:
+                #         # print("Item: "+item[1])
+                #         # print("Values: "+self.values[0])
+                #         if (self.values[0] != item[1]):
+                #             # print("Item: "+item[1])
+                #             insert_query = """ INSERT INTO news (title, url, description, date) VALUES """+str(self.values)+""";"""
+                #             self.cursor.execute(insert_query)
+                #             self.connection.commit()
+                #             # print("1 Record inserted successfully")
+                #             # count = self.cursor.rowcount
+                #             # print(count, "Record inserted successfully ")
+                #             # Fetch result
+                #             # self.cursor.execute("SELECT * from news")
+                #             # record = self.cursor.fetchall()
+                #             # print("Result ", record)
+                #         else:
+                #             print("item already exists with id "+item[0])
+                # else:
+                #     insert_query = """ INSERT INTO news (title, url, description, date) VALUES """+str(self.values)+""";"""
+                #     self.cursor.execute(insert_query)
+                #     self.connection.commit()
+                #     # print("1 Record inserted successfully")
+                #     count = self.cursor.rowcount
+                #     # print(count, "Record inserted successfully ")
+                #     # Fetch result
+                #     # self.cursor.execute("SELECT * from news")
+                #     # record = self.cursor.fetchall()
+                #     # print("Result ", record)
 
 
             elif (self.command == "change"):
