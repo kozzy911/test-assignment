@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/init:/docker-entrypoint-initdb.d
+    environment:
+      REQUESTS_CA_BUNDLE: ${REQUESTS_CA_BUNDLE}
+      SSL_CERT_FILE: ${SSL_CERT_FILE}
+      POSTGRES_USER: burger
+      POSTGRES_PASSWORD: new_password
+      POSTGRES_DB: reuters
+  backend:
+    container_name: myapp
+    build: .
+    volumes:
+      - .:/code
+    command: python3 reuters2.py
+    environment:
+      REQUESTS_CA_BUNDLE: ${REQUESTS_CA_BUNDLE}
+      SSL_CERT_FILE: ${SSL_CERT_FILE}
