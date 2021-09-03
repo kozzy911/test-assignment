@@ -139,14 +139,14 @@ if __name__ == '__main__':
             ConnectPG(values, command)
         elif (command == "update"):
             feed = ReadRss(url, headers)
-            i=1
+            # i=1
             for item in feed.articles_dicts:
-                i=i+1
+                # i=i+1
 
                 values = (item["title"], item["link"], item["description"], item["pubdate"])
                 ConnectPG(values, command)
 
-                if i>3: break
+                # if i>3: break
             # ConnectPG("", "fetch")
         else:
             print("please run the command:")
